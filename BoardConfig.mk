@@ -30,13 +30,16 @@
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := pyramid
 
-# Kernel
+# Kernel [build]
 BOARD_KERNEL_BASE := 0x48000000
 BOARD_KERNEL_PAGE_SIZE := 2048
 BOARD_KERNEL_CMDLINE := console=ttyHSL0 androidboot.hardware=pyramid no_console_suspend=1
 
 TARGET_KERNEL_SOURCE := kernel/htc/msm8660/
 TARGET_KERNEL_CONFIG := pyramid_defconfig
+
+# Kernel [prebuilt]
+TARGET_PREBUILT_KERNEL := device/htc/pyramid/prebuilt/kernel
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 960
@@ -49,14 +52,12 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := pyramid
 BOARD_USES_LEGACY_RIL := true
 
 # Wifi
-WIFI_DRIVER_MODULE_NAME          := bcmdhd
-WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/bcmdhd.ko"
+# WIFI_DRIVER_MODULE_NAME          := bcmdhd
+# WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/bcmdhd.ko"
 
 # Bluetooth
-BOARD_HAVE_BLUETOOTH := true
-BOARD_HAVE_BLUETOOTH_BCM := true
 BOARD_BLUEDROID_VENDOR_CONF := device/htc/pyramid/bluetooth/vnd_msm8660.txt
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR ?= device/htc/pyramid/bluetooth/include
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/htc/pyramid/bluetooth/include
 
 # Audio
 BOARD_HAVE_HTC_AUDIO := true
