@@ -4,6 +4,8 @@ on early-init
     mkdir /storage 0050 system sdcard_r
     mkdir /storage/sdcard0 0000 system system
 
+    mkdir /storage/usbdisk 0775 system system
+
     # for backwards compatibility
     symlink /storage/sdcard0 /sdcard
     symlink /storage/sdcard0 /mnt/sdcard
@@ -51,7 +53,7 @@ on early-init
 on init
     mkdir /devlog 0700 root root
 
-on emmc-fs
+on fs
     # mount all mmc partitions
     mount_all /fstab.pyramid
 
@@ -61,6 +63,8 @@ on emmc-fs
     symlink /system/vendor/firmware/fw_bcmdhd_apsta.bin /vendor/firmware/fw_bcmdhd_apsta.bin
     symlink /system/vendor/firmware/fw_bcmdhd_p2p.bin /vendor/firmware/fw_bcmdhd_p2p.bin
     symlink /system/vendor/firmware/bcm4329.hcd /vendor/firmware/bcm4329.hcd
+
+    symlink /system/vendor/lib /vendor/lib
 
     mkdir /vendor/etc 0771 system system
     symlink /system/vendor/etc/audio_effects.conf /vendor/etc/audio_effects.conf
@@ -173,14 +177,14 @@ service dhcpcd_wlan0 /system/bin/dhcpcd -ABKL
     disabled
     oneshot
 
-service hciattach /system/bin/brcm_patchram_plus --enable_hci \
-        --tosleep 50000 --baudrate 3000000 --use_baudrate_for_download \
-        --patchram /vendor/firmware/bcm4329.hcd /dev/ttyHS0
-    class main
-    user bluetooth
-    group bluetooth net_bt_admin
-    disabled
-    oneshot
+#service hciattach /system/bin/brcm_patchram_plus --enable_hci \
+#        --tosleep 50000 --baudrate 3000000 --use_baudrate_for_download \
+#        --patchram /vendor/firmware/bcm4329.hcd /dev/ttyHS0
+#    class main
+#    user bluetooth
+#    group bluetooth net_bt_admin
+#    disabled
+#    oneshot
 
 service hdmid /system/bin/hdmid
     class main
@@ -195,6 +199,14 @@ service iprenew_wlan0 /system/bin/dhcpcd -n
     class main
     disabled
     oneshot
+
+service mpdecision /system/bin/mpdecision --no_sleep --avg_comp --single_core_while_panel_off
+    user root
+    disabled
+
+service thermald /system/bin/thermald
+    user root
+    disabled
 
 service netmgrd /system/bin/netmgrd
     class main
@@ -228,6 +240,7 @@ service rmt_storage /system/bin/rmt_storage /dev/block/mmcblk0p26 /dev/block/mmc
 service wpa_supplicant /system/bin/wpa_supplicant -Dnl80211 -iwlan0 -c /data/misc/wifi/wpa_supplicant.conf
     user root
     group wifi inet
+    class main
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled
     oneshot
@@ -238,10 +251,10 @@ on property:init.svc.bootanim=stopped
 on property:ro.hdmi.enable=true
     start hdmid
 
-on property:service.adb.root=1
-    write /sys/class/android_usb/android0/enable 0
-    restart adbd
-    write /sys/class/android_usb/android0/enable 1
+#on property:service.adb.root=1
+#    write /sys/class/android_usb/android0/enable 0
+#    restart adbd
+#    write /sys/class/android_usb/android0/enable 1
 
 on property:sys.radio.shutdown=true
     exec /system/bin/sh /system/etc/init.qcom.efs.sync.sh
