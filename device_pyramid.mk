@@ -30,10 +30,6 @@ PRODUCT_PACKAGES += \
 ## The gps config appropriate for this device
 PRODUCT_COPY_FILES += device/common/gps/gps.conf_EU:system/etc/gps.conf
 
-# Bluetooth
-PRODUCT_COPY_FILES += \
-    device/htc/msm8660-common/firmware/bcm4329.hcd:system/vendor/firmware/bcm4329.hcd
-
 # Wifi
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4329/device-bcm.mk)
 
@@ -72,10 +68,6 @@ PRODUCT_COPY_FILES += \
 # HTC BT Audio tune
 PRODUCT_COPY_FILES += device/htc/pyramid/configs/AudioBTID.csv:system/etc/AudioBTID.csv
 
-# QC thermald config
-PRODUCT_COPY_FILES += device/htc/pyramid/configs/thermald.conf:system/etc/thermald.conf
-
-
 # Sound configs
 PRODUCT_COPY_FILES += \
     device/htc/pyramid/dsp/AdieHWCodec.csv:system/etc/AdieHWCodec.csv \
@@ -106,11 +98,6 @@ PRODUCT_COPY_FILES += \
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
-
-# Custom media config for HTC camera
-PRODUCT_COPY_FILES += \
-    device/htc/msm8660-common/configs/media_codecs.xml:system/etc/media_codecs.xml \
-    device/htc/pyramid/configs/media_profiles.xml:system/etc/media_profiles.xml
 
 ## misc
 PRODUCT_PROPERTY_OVERRIDES += \
